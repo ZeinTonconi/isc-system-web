@@ -236,13 +236,16 @@
   ],
   "roles": [
     {
-      "roleName": "Jefe de Carrera"
+      "roleName": "Jefe de Carrera",
+      "id": 1
     },
     {
-      "roleName": "Docente"
+      "roleName": "Docente",
+      "id":2
     },
     {
-      "roleName": "Estudiante"
+      "roleName": "Estudiante",
+      "id":3
     },
     {
       "roleName": "Estudiante2",

@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState, MouseEvent} from "react"
 
-import { Box, Card, CardActionArea, CardContent, Collapse, IconButton, styled, Typography, useMediaQuery } from "@mui/material"
+import { Box, Card, CardActionArea, CardContent, Collapse, IconButton, Menu, MenuItem, styled, Typography, useMediaQuery } from "@mui/material"
 import DeleteIcon from '@mui/icons-material/Delete';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -23,13 +23,30 @@ const RoleComponent : React.FC<RoleComponentProps> = ({ role, selectedRole, onRo
 
     const [expanded, setExpanded] = useState(false)
     const [showDelete, setShowDelete] = useState<boolean>(false)
+    const [anchorE1, setAnchorE1] = useState<null | HTMLElement> (null); 
     const isSmall = useMediaQuery((theme: any) => theme.breakpoints.down('sm'));
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     }
 
-    return (
+    const handleClick = (event: MouseEvent<HTMLElement>) => {
+        setAnchorE1(event.currentTarget);
+    }
+
+    const handleClose = () => {
+        setAnchorE1(null);
+    };
+
+    const hadleDeletClick = () => {
+        setShowDelete(true);
+        handleClose();
+    }
+
+    const hadleEditClick = () => {
+        handleClose();
+    }
+            return (
         <>
             <Card sx={{ maxWidth: isSmall ? 700 : '100%', backgroundColor: selectedRole === role.roleName ? 'LightGray' : 'inherit', marginBottom:2}}>
                 <CardActionArea onClick={() => onRoleClick(role.roleName)}>
@@ -55,11 +72,10 @@ const RoleComponent : React.FC<RoleComponentProps> = ({ role, selectedRole, onRo
                                 )}
 
                                 <IconButton
-                                    color="secondary"
-                                    aria-label="eliminar"
-                                    onClick={() => { setShowDelete(true) }}
+                                    color="inherit"
+                                    aria-label="more"
+                                    onClick={handleClick}
                                 >
-                                    <DeleteIcon color = "primary"/>
                                 </IconButton>
                             </Box>
                         </Box>
@@ -74,6 +90,14 @@ const RoleComponent : React.FC<RoleComponentProps> = ({ role, selectedRole, onRo
                 )}
             </Card>
 
+            <Menu
+                anchorEl={anchorE1}
+                open={Boolean(anchorE1)}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={hadleEditClick}>Editar nombre</MenuItem>
+                <MenuItem onClick={hadleDeletClick}>Eliminar</MenuItem>
+            </Menu>
             {showDelete && (
                 <ConfirmDelete roleName={role.roleName} isVisible={showDelete} setIsVisible={setShowDelete} onDelete={() => onDelete(role.roleName)}/>
             )}
@@ -81,4 +105,4 @@ const RoleComponent : React.FC<RoleComponentProps> = ({ role, selectedRole, onRo
     )
 }
 
-export default RoleComponent;
+export default RoleComponent
