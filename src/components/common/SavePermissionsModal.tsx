@@ -32,12 +32,12 @@ const SavePermissionsModal: FC<savePermissionsChagesModalProps> = ({ isVisible, 
         <Typography id="delete-modal-description" variant='body1' sx={{ marginTop: '20px' }}>
           ¿Estás seguro de que deseas La condifuración de permisos?
         </Typography>
-        <Box display="flex" justifyContent="center" mt={2} sx={{ marginTop: '20px' }}>
-          <Button variant="outlined" color="secondary" onClick={toggleModal}>
-            Cancelar
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleSave}sx={{ marginLeft: '15px' }}>
+        <Box display="flex" justifyContent="flex-end" mt={2} sx={{ marginTop: '20px' }}>
+          <Button variant="contained" color="primary" onClick={handleSave}sx={{ marginRight: '15px' }}>
             Guardar
+          </Button>
+          <Button variant="outlined" color="error" onClick={toggleModal}>
+            Cancelar
           </Button>
         </Box>
       </Box>

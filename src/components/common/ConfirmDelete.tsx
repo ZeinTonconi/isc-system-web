@@ -38,12 +38,12 @@ const DeleteRoleModal: FC<DeleteRoleModalProps> = ({ roleName, isVisible, setIsV
         <Typography id="delete-modal-description" variant='body2' sx={{ marginTop: '20px' }} align = 'center' color='gray'>
           Si eliminas el rol no podrás recuperarlo
         </Typography>
-        <Box display="flex" justifyContent="center" mt={2} sx={{ marginTop: '20px' }}>
-          <Button variant="outlined" color="secondary" onClick={toggleModal}>
-            Cancelar
+        <Box display="flex" justifyContent="flex-end" mt={2} sx={{ marginTop: '20px' }}>
+          <Button variant="contained" color="error" onClick={handleDelete}sx={{ marginRight: '15px' }}>
+            Finalizar
           </Button>
-          <Button variant="contained" color="error" onClick={handleDelete}sx={{ marginLeft: '15px' }}>
-            Eliminar
+          <Button variant="contained" color="primary" onClick={toggleModal}>
+            Cancelar
           </Button>
         </Box>
       </Box>
