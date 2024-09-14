@@ -7,6 +7,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+
 import { deleteUser, getUsers } from "../../services/usersService";
 import ContainerPage from "../../components/common/ContainerPage";
 import { getRoles } from "../../services/roleService";
@@ -188,7 +189,7 @@ const applyFilters = () => {
 
   const fetchRoles = async () => {
     const rolesResponse = await getRoles()
-    setRoles(rolesResponse)
+    setRoles(rolesResponse.data)
   }
 
   useEffect(() => {
@@ -247,7 +248,7 @@ const applyFilters = () => {
                       onChange={handleSelectRoleChange}
                     >
                       {roles.map((rol: Role) => (
-                        <MenuItem value={rol.roleName}>{rol.roleName} ({countStudentsWithRole(rol.roleName)})</MenuItem>
+                        <MenuItem value={rol.name}>{rol.name} ({countStudentsWithRole(rol.name)})</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
