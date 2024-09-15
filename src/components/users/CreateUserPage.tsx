@@ -290,8 +290,11 @@ const CreateUserPage = ({handleClose, openCreate, user = null} : UserFormProps) 
 
           <Grid item xs={12} sx={{paddingTop: 5}}>
             <Grid container spacing={2} justifyContent="flex-end">
-              <Button variant="contained" color="primary" type="submit">
+              <Button variant="contained" color="primary" type="submit" sx={{marginRight: "15px"}}>
                 GUARDAR
+              </Button>
+              <Button variant="outlined" color="error" onClick={handleClose}>
+                Cancelar
               </Button>
             </Grid>
           </Grid>

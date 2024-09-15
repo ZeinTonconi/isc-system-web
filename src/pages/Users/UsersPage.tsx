@@ -290,17 +290,16 @@ const applyFilters = () => {
               </DialogContentText>
             </DialogContent>
 
-                <DialogActions>
-                  <Button 
-                    onClick={handleCloseDelete} 
-                    color="primary">
-                    Cancelar
-                  </Button>
-                  
+                <DialogActions> 
                   <Button 
                     onClick={handleDelete} 
-                    color="secondary" autoFocus>
-                    Eliminar
+                    variant="contained" color="error" autoFocus>
+                    Finalizar
+                  </Button>
+                  <Button 
+                    onClick={handleCloseDelete} 
+                    variant="contained" color="primary">
+                    Cancelar
                   </Button>
                 </DialogActions>
               </Dialog>

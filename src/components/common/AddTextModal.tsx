@@ -56,11 +56,11 @@ const [error, setError] = useState<string | null>(null);
           helperText={error}
         />
         <Box display="flex" justifyContent="flex-end" mt={2}  sx={{ marginTop: '20px' }}>
-          <Button variant="outlined" color="secondary" onClick={toggleModal} sx={{ marginRight: '10px' }}>
-            Cancelar
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleCreate}>
+          <Button variant="contained" color="primary" onClick={handleCreate} sx={{ marginRight: '10px' }}>
             Crear
+          </Button>
+          <Button variant="outlined" color="error" onClick={toggleModal}>
+            Cancelar
           </Button>
         </Box>
       </Box>
