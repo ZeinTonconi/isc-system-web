@@ -87,9 +87,9 @@ const LoginPage = () => {
             value={formik.values.password}
           />
           {formik.touched.password && formik.errors.password ? (
-            <ErrorMessage 
+            <ErrorMessage
               dataTestId="error-message-password"
-              message={formik.errors.password} 
+              message={formik.errors.password}
             />
           ) : null}
           {error && <div className="text-red-500">{error}</div>}

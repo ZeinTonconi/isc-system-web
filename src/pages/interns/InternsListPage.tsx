@@ -15,9 +15,10 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import { Event, EventDetails } from "../../models/eventInterface";
+import { Event } from "../../models/eventInterface";
 import EventDetailsPage from "../../components/common/EventDetailsPage";
 import { getFullEventInformationService } from "../../services/eventsService";
+import { User } from "../../models/userInterface";
 
 interface FullEvent extends Event {
   interns: [];
@@ -50,8 +51,8 @@ const InternsListPage = () => {
   const navigate = useNavigate();
 
   const handleStatusChange = (id: number, newStatus: string) => {
-    setStudents((prevStudents: any) =>
-      prevStudents.map((student: any) =>
+    setStudents((prevStudents: User[]) =>
+      prevStudents.map((student: User) =>
         student.id === id ? { ...student, status: newStatus } : student
       )
     );
@@ -77,8 +78,7 @@ const InternsListPage = () => {
       responsiblePerson: event?.responsible_intern_id,
       description: event?.description,
     };
-    setEventDetails(details);
-    console.log(event, "xd");
+    setEventDetails(details); 
   };
 
   const setupStudents = () => {
@@ -106,8 +106,8 @@ const InternsListPage = () => {
   }, [event]);
 
   const handleHoursSave = () => {
-    setStudents((prevStudents) =>
-      prevStudents.map((student) =>
+    setStudents((prevStudents: typeof students) =>
+      prevStudents.map((student: User) =>
         student.id === selectedId
           ? { ...student, hours: Number(newHours) }
           : student

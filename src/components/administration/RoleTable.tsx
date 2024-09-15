@@ -20,6 +20,7 @@ const RoleTable: React.FC<RoleTableProps> = ({ roles, onRoleSelect, setIsModalVi
 
   const handleRoleDelete = (roleName: string) =>{
     //TODO: Lógica para borrar el componente
+    console.log("Borrando rol: ", roleName);
   }
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {

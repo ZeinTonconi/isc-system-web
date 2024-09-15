@@ -2,11 +2,6 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   IconButton,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -14,7 +9,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 import ContainerPage from "../../components/common/ContainerPage";
 import { getEventsInformationsService } from "../../services/eventsService";
@@ -25,7 +19,7 @@ const EventTable = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [events, setEvents] = useState<EventInformations[]>();
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [,setSelectedId] = useState<number | null>(null);
 
   const fetchEvents = async () => {
     const res = await getEventsInformationsService();
@@ -46,8 +40,9 @@ const EventTable = () => {
       align: "center",
       flex: 1,
       // TODO: change any to an interface
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       valueGetter: (params: any) =>
-        dayjs(params.startDate).format("DD/MM/YYYY"),
+        dayjs(params.row.start_date).format("DD/MM/YYYY"),
     },
     {
       field: "title",

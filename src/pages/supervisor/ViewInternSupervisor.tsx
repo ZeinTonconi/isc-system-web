@@ -1,8 +1,20 @@
 import { useState } from "react";
-import { Checkbox, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Grid } from "@mui/material";
+import {
+  Checkbox,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Grid,
+} from "@mui/material";
 import dayjs from "dayjs";
-import * as XLSX from "xlsx"; 
-import EventDetailsPage from "../../components/common/EventDetailsPage"; 
+import * as XLSX from "xlsx";
+import EventDetailsPage from "../../components/common/EventDetailsPage";
 interface StudentRow {
   id: number;
   name: string;
@@ -21,8 +33,9 @@ const eventDetails = {
   maxParticipants: 30,
   minParticipants: 5,
   responsiblePerson: "Juan",
-  description: "Se necesitan becarios que ayuden en la logística del evento donde se recibirá a los estudiantes ganadores de la beca 100 mejores.",
-  status: "PENDIENTE",
+  description:
+    "Se necesitan becarios que ayuden en la logística del evento donde se recibirá a los estudiantes ganadores de la beca 100 mejores.",
+  status: "PENDIENTE" as "PENDIENTE" | "ACEPTADO" | "RECHAZADO",
 };
 
 const ViewInternSupervisor = () => {
@@ -79,7 +92,7 @@ const ViewInternSupervisor = () => {
   };
 
   return (
-     <EventDetailsPage event={eventDetails}>
+    <EventDetailsPage event={eventDetails}>
       <TableContainer component={Paper} sx={{ mt: 4 }}>
         <Table>
           <TableHead>
@@ -98,33 +111,36 @@ const ViewInternSupervisor = () => {
                 <TableCell>
                   <TextField
                     value={student.observations}
-                    onChange={(e) => handleObservationChange(student.id, e.target.value)}
+                    onChange={(e) =>
+                      handleObservationChange(student.id, e.target.value)
+                    }
                     fullWidth
                   />
                 </TableCell>
                 <TableCell>
                   <Checkbox
                     checked={student.assistance}
-                    onChange={(e) => handleCheckboxChange(student.id, e.target.checked)}
+                    onChange={(e) =>
+                      handleCheckboxChange(student.id, e.target.checked)
+                    }
                   />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </TableContainer> 
+      </TableContainer>
       <Grid container justifyContent="center" sx={{ mt: 4 }}>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleExportToExcel}  
-          >
-            Cerrar Registro
-          </Button>
-        </Grid> 
-     </EventDetailsPage>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleExportToExcel}
+        >
+          Cerrar Registro
+        </Button>
+      </Grid>
+    </EventDetailsPage>
   );
 };
 
 export default ViewInternSupervisor;
-

@@ -9,7 +9,7 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
@@ -31,17 +31,30 @@ interface RowData {
   status: string;
 }
 
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "PENDIENTE":
+      return "#5F9EA0";
+    case "ACEPTADO":
+      return "#32CD32";
+    case "SUSPLENTE":
+      return "#000000";
+    default:
+      return "#FF0000";
+  }
+};
+
 const MyEventsTable = () => {
   const statusTranslation = (status: string) => {
     const statusMap: Record<string, string> = {
       accepted: "ACEPTADO",
       rejected: "RECHAZADO",
       reserve: "SUSPLENTE",
-      pending: "PENDIENTE"
+      pending: "PENDIENTE",
     };
     return statusMap[status.toLowerCase()] || status;
   };
-  
+
   const user = useUserStore((state) => state.user);
   const [events, setEvents] = useState<EventInternsType[]>();
   const [rows, setRows] = useState<RowData[]>([]);
@@ -99,7 +112,7 @@ const MyEventsTable = () => {
     ...buttonStyle,
     borderRadius: "30px",
     padding: "5px 10px",
-    textTransform: "none",
+    textTransform: "none" as const,
   };
 
   const columns: GridColDef[] = [
@@ -157,24 +170,15 @@ const MyEventsTable = () => {
       field: "status",
       headerName: "Estado",
       flex: 1,
-      renderCell: (params: any) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Button
           variant="contained"
           style={{
             ...statusButtonStyle,
-            backgroundColor:
-              params.row.status === "PENDIENTE"
-                ? "#5F9EA0"
-                : params.row.status === "ACEPTADO"
-                ? "#32CD32"
-                : params.row.status === "SUSPLENTE"
-                ? "#000000"
-                : "#FF0000",
-            color: "#FFFFFF",
-            cursor: "default",
+            backgroundColor: getStatusColor(params.row.status),
           }}
           disabled
-          >
+        >
           {params.row.status}
         </Button>
       ),
