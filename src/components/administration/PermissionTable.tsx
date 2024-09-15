@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Switch, Table, TableBody, TableCell, TableHead, TableRow, Typography, IconButton, Collapse} from "@mui/material";
-import { getPermissions } from "../../services/permissionsService";
+import getPermissions from "../../services/permissionsService";
 import { Section } from "../../models/sectionInterface";
 import { Permission } from "../../models/permissionInterface";
 import SavePermissionsModal from "../common/SavePermissionsModal";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { PermissionsCategory } from "../../models/permissionsCategoryInterface";
-import { PermissionTableProps } from "../../models/permissionTablePropsInterface";
 
 
-const PermissionTable: React.FC<PermissionTableProps> = ({ currentPermissions}) => {
+const PermissionTable = () => {
   const [sections, setSections] = useState<Section[]>([]);
   const [listOfChanges, setListOfChanges] = useState<Permission[]>([]);
   const [buttonVisible, setButtonVisible] = useState(false);
@@ -18,21 +16,17 @@ const PermissionTable: React.FC<PermissionTableProps> = ({ currentPermissions}) 
 
   const fetchPermissions = async () => {
     const response = await getPermissions();
-    const permissionsCategory: PermissionsCategory = response.data;
-    const sections: Section[] = [];
-    Object.keys(permissionsCategory).forEach((secitionName:string) => {
-      const section = permissionsCategory[secitionName];
-      sections.push({name:secitionName, permissions: section.flat()});
-    });
-    setSections(sections);
+    setSections(response);
     setOpenSections(new Array(response.length).fill(true)); // Inicializa todas las secciones como abiertas
   }
   useEffect(() => {
     fetchPermissions();
   }, []);
 
-  const handleSwitchChange = (sectionIndex: number, permissionIndex: number) => () => {
+  const handleSwitchChange = (sectionIndex: number, permissionIndex: number) => (event: any) => {
     const newSections = [...sections];
+    newSections[sectionIndex].permissions[permissionIndex].state = event.target.checked;
+    setSections(newSections);
     if (!listOfChanges.includes(newSections[sectionIndex].permissions[permissionIndex])) {
       setListOfChanges([...listOfChanges, newSections[sectionIndex].permissions[permissionIndex]]);
     } else {
@@ -55,6 +49,15 @@ const PermissionTable: React.FC<PermissionTableProps> = ({ currentPermissions}) 
   }, [listOfChanges])
 
   const cancelChanges = () => {
+    const newSections = sections;
+    newSections.forEach((section) => {
+      section.permissions.forEach((permission) => {
+        if (listOfChanges.includes(permission)) {
+          permission.state = !permission.state;
+        }
+      })
+    })
+    setSections(newSections);
     setListOfChanges([]);
   }
   return (
@@ -95,19 +98,19 @@ const PermissionTable: React.FC<PermissionTableProps> = ({ currentPermissions}) 
                   {openSections[sectionIndex] ? <ExpandLess /> : <ExpandMore />}
                 </IconButton>
                 <Typography variant="subtitle1" sx={{ marginLeft: "8px", color: "primary" }}>
-                  {section.name}
+                  {section.subtitle}
                 </Typography>
               </Box>
   
               <Collapse in={openSections[sectionIndex]} timeout="auto" unmountOnExit>
                 <Table className="border-table" sx={{ marginTop: "10px" }}>
                   <TableBody>
-                    {section.permissions.map((permission: Permission, permissionIndex: number) => (
+                    {section.permissions.map((permission: any, permissionIndex: number) => (
                       <TableRow key={permissionIndex}>
-                        <TableCell>{permission.name}</TableCell>
+                        <TableCell>{permission.action}</TableCell>
                         <TableCell>
                           <Switch
-                            checked={(currentPermissions.includes(permission.name) || listOfChanges.includes(permission))&&!(currentPermissions.includes(permission.name) && listOfChanges.includes(permission))}
+                            checked={permission.state}
                             onChange={handleSwitchChange(sectionIndex, permissionIndex)}
                           />
                         </TableCell>

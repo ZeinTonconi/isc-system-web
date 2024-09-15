@@ -7,35 +7,19 @@ import RoleTable from "../../components/administration/RoleTable";
 import PermissionTable from "../../components/administration/PermissionTable";
 import AddTextModal from "../../components/common/AddTextModal";
 import { getRoles, addRole } from "../../services/roleService";
-import { Role } from "../../models/roleInterface";
-import { RolePermissions } from "../../models/rolePermissionInterface";
 
 
 const AdministratorPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [title, setTitle] = useState("");
+  const [roles, setRoles] = useState([]);
+  const [title, setTitle] = useState("Jefe de Carrera");
   const isSmallScreen = useMediaQuery('(max-width:600px)');
-  const [currentPermissions, setCurrentPermissions] = useState<string[]>([])
 
   useEffect(() => {
     const fetchRoles = async () => {
       try {
         const rolesData = await getRoles();
-        const rolesPermissions: RolePermissions = rolesData.data;
-        const rolesFetched: Role[] = []
-        Object.keys(rolesPermissions).forEach((roleName:string) => {
-          const rolePermissions = rolesPermissions[roleName];
-          rolesFetched.push({
-            id: rolePermissions.id,
-            name: roleName,
-            disabled: rolePermissions.disabled,
-            permissions: rolePermissions.permissions
-          })
-        })
-        setRoles(rolesFetched);
-        setTitle(rolesFetched[0].name);
-        setCurrentPermissions(rolesFetched[0].permissions);
+        setRoles(rolesData.data);
       } catch (error) {
         console.error("Error fetching roles:", error);
       }
@@ -55,11 +39,6 @@ const AdministratorPage = () => {
 
   const handleRoleSelect = (roleName : string) => {
     setTitle(roleName);
-    roles.forEach((role: Role) => {
-      if (role.name === roleName){
-        setCurrentPermissions(role.permissions);
-      }
-    })
   }
 
   return (
@@ -74,7 +53,7 @@ const AdministratorPage = () => {
         <RoleTable roles={roles} onRoleSelect={handleRoleSelect} selectedRole={""} setIsModalVisible = {setIsModalVisible}/>
       </Grid>
       <Grid item xs={8}>
-        {!isSmallScreen && <PermissionTable currentPermissions={currentPermissions}/>}
+        {!isSmallScreen && <PermissionTable />}
       </Grid>
         <AddTextModal
           isVisible={isModalVisible}

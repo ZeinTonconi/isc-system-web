@@ -1,22 +1,12 @@
-import apiClient from "./apiInstance";
+import jsonClient from "./jsonServerInstance";
 
-const permissionTable = 'permission/';
-
-export const getPermissions = async () => {
+const getPermissions = async () => {
     try {
-        const response = await apiClient.get(permissionTable);
+        const response = await jsonClient.get('permissions/');
         return response.data;
     } catch (error) {
         console.error("Error fetching permissions data:", error);
     }
 };
 
-
-export const getPermissionById = async (id:number) => {
-    try {
-        const response = await apiClient.get(`${permissionTable}${id}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching permissions data:", error);
-    }
-};
+export default getPermissions
