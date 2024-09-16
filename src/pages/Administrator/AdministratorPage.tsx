@@ -7,7 +7,8 @@ import RoleTable from "../../components/administration/RoleTable";
 import PermissionTable from "../../components/administration/PermissionTable";
 import AddTextModal from "../../components/common/AddTextModal";
 import { getRoles, addRole } from "../../services/roleService";
-
+import { Role } from "../../models/roleInterface";
+import { RolePermissions } from "../../models/rolePermissionInterface";
 
 const AdministratorPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
