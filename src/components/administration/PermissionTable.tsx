@@ -7,18 +7,27 @@ import SavePermissionsModal from "../common/SavePermissionsModal";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { PermissionsCategory } from "../../models/permissionsCategoryInterface";
 import { PermissionTableProps } from "../../models/permissionTablePropsInterface";
-const PermissionTable: React.FC<PermissionTableProps> = ({ currentRol}) => {
+
+const PermissionTable: React.FC<PermissionTableProps> = ({ currentRol }) => {
   const [sections, setSections] = useState<Section[]>([]);
   const [listOfChanges, setListOfChanges] = useState<Permission[]>([]);
   const [buttonVisible, setButtonVisible] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [openSections, setOpenSections] = useState<boolean[]>([]);
+  const [changesSaved, setChangesSaved] = useState(false);
 
   const fetchPermissions = async () => {
     const response = await getPermissions();
-    setSections(response);
-    setOpenSections(new Array(response.length).fill(true)); // Inicializa todas las secciones como abiertas
+    const permissionsCategory: PermissionsCategory = response.data;
+    const sections: Section[] = [];
+    Object.keys(permissionsCategory).forEach((secitionName:string) => {
+      const section = permissionsCategory[secitionName];
+      sections.push({name:secitionName, permissions: section.flat()});
+    });
+    setSections(sections);
+    setOpenSections(new Array(response.length).fill(true));
   }
+
   useEffect(() => {
     fetchPermissions();
   }, []);
@@ -41,24 +50,29 @@ const PermissionTable: React.FC<PermissionTableProps> = ({ currentRol}) => {
   };
 
   useEffect(() => {
-    if (listOfChanges.length > 0) {
+    if (listOfChanges.length > 0 || !changesSaved) {
       setButtonVisible(true);
-    } else {
-      setButtonVisible(false);
     }
   }, [listOfChanges])
 
+  useEffect(() => {
+    setButtonVisible(false);
+  }, [currentRol]);
+
   const cancelChanges = () => {
-    const newSections = sections;
-    newSections.forEach((section) => {
-      section.permissions.forEach((permission) => {
-        if (listOfChanges.includes(permission)) {
-          permission.state = !permission.state;
-        }
-      })
-    })
-    setSections(newSections);
-    setListOfChanges([]);
+    setButtonVisible(false);
+    setChangesSaved(false);
+    setListOfChanges([])
+  };
+
+  const saveChanges = () => {
+    setShowModal(true);
+    setChangesSaved(true); 
+  }
+
+  const handleSaveComplete = () => {
+    setChangesSaved(true);
+    setButtonVisible(false);
   };
 
   return (
@@ -102,7 +116,6 @@ const PermissionTable: React.FC<PermissionTableProps> = ({ currentRol}) => {
                   {section.subtitle}
                 </Typography>
               </Box>
-  
               <Collapse in={openSections[sectionIndex]} timeout="auto" unmountOnExit>
                 <Table className="border-table" sx={{ marginTop: "10px" }}>
                   <TableBody>
@@ -133,7 +146,7 @@ const PermissionTable: React.FC<PermissionTableProps> = ({ currentRol}) => {
           variant="contained"
           color="primary"
           sx={{ marginRight: "20px", borderRadius: "16px" }}
-          onClick={()=>{setShowModal(true)}}>
+          onClick={saveChanges}>
             Guardar
           </Button>
           <Button
@@ -148,7 +161,7 @@ const PermissionTable: React.FC<PermissionTableProps> = ({ currentRol}) => {
       )}
 
       {showModal && (
-        <SavePermissionsModal isVisible={showModal} setIsVisible={setShowModal} onSave={()=>{}} role={currentRol.name} />
+        <SavePermissionsModal isVisible={showModal} setIsVisible={setShowModal} onSave={handleSaveComplete} onCancel={cancelChanges} role={currentRol.name} />
       )}
     </>
   );
