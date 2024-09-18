@@ -51,6 +51,12 @@ const Layout = () => {
   const [open, setOpen] = React.useState(true);
   const navigate = useNavigate();
   const { clearUser, user } = useUserStore();
+  
+  for(const key in user?.roles_permissions){
+    if(!user.roles.some(role => role == user?.roles_permissions[key].role_name))
+      user.roles.push(user?.roles_permissions[key].role_name)
+  }
+
   const settings = [
     {
       title: "Perfil",
@@ -117,7 +123,7 @@ const Layout = () => {
               color="textSecondary"
               textAlign={"right"}
             >
-              {user?.roles}
+              {user?.roles.join(" ")}
             </Typography>
           </Box>
 
