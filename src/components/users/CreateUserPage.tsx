@@ -77,7 +77,7 @@ const CreateUserPage = ({ handleClose, openCreate, user = null }: UserFormProps)
             await createUserWIthRoles(formUser)
           }
           else
-            await putUser(user.id, formUser)
+            await putUser(user.id || 0, formUser)
           setIsSuccessOpen(true)
           resetForm();
         } catch (error) {
@@ -405,6 +405,7 @@ const CreateUserPage = ({ handleClose, openCreate, user = null }: UserFormProps)
               </Grid>
             </Grid>
           </Grid>
+
           <Grid item xs={12} sx={{ paddingTop: 5 }}>
             <Grid container spacing={2} justifyContent="flex-end">
               <Button variant="outlined" color="primary" onClick={handleClose} sx={{ marginRight: "20px" }}>
