@@ -17,7 +17,6 @@ import { roles } from "./roles";
 const { ADMIN, PROFESSOR, STUDENT, INTERN, PROGRAM_DIRECTOR, SUPERVISOR } =
   roles;
 export const menu = [
-  // TODO: check roles on sidebar
   {
     key: "users",
     path: "/users",
