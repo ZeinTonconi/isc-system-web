@@ -44,7 +44,7 @@ const Profile = () => {
 
   const fetchUserProfile = async (id: string) => {
     const response = await getUserById(Number(id));
-    setUserProfile(response);
+    setUserProfile(response.data);
   };
   useEffect(() => {
     if (id) {
